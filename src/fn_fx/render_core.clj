@@ -140,9 +140,15 @@
   (Class/forName nm))
 
 (alter-var-root #'class-for-name memoize)
-
+(def *use-keyword-autocomplete-helper* nil)
 (defn component-impl [type args static-props]
-  (let [p                (select-keys args static-props)
+  (let [args             (if *use-keyword-autocomplete-helper*
+                           (map #(if (clojure.string/starts-with? % (name type))
+                                   (clojure.string/replace-first % (str (name type) "/") "")
+                                   %)
+                              args)
+                           args)
+        p                (select-keys args static-props)
         unsorted-kw-args (set (keys p))
         arg-kws          (->> (ru/get-value-ctors (Class/forName (name type)))
                               (sort-by #(count (:prop-names-kw %)))
@@ -180,8 +186,8 @@
                      (let [^objects casted (into-array Object (map convert-value
                                                                    args
                                                                    prop-types))]
-                       (.invoke ^Method method nil casted)))
-                   )])]
+                       (.invoke ^Method method nil casted))))])]
+                   
 
     (defmethod convert-value
       [Value klass]

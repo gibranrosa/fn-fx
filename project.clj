@@ -9,5 +9,7 @@
   :profiles {:dev {:source-paths ["src" "examples"]
                    :dependencies [[com.github.javaparser/javaparser-core "2.5.1"]
                                   [org.jboss.forge.roaster/roaster-api "2.19.0.Final"]
-                                  [org.jboss.forge.roaster/roaster-jdt "2.19.0.Final"]]}}
+                                  [org.jboss.forge.roaster/roaster-jdt "2.19.0.Final"]
+                                  [proto-repl "0.3.1"]
+                                  [org.clojure/tools.trace "0.7.9"]]}}
   :plugins [[lein-release "1.0.5"]])
